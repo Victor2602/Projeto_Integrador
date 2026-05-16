@@ -1,4 +1,10 @@
-CREATE TYPE "funcao_usuario" AS ENUM (
+CREATE TYPE "nivel_admin" AS ENUM (
+    'operacional',
+    'gestor',
+    'superadmin'
+);
+
+CREATE TYPE "papel_usuario" AS ENUM (
   'discente',
   'docente',
   'funcionario',
@@ -43,227 +49,236 @@ CREATE TYPE "status_pedido" AS ENUM (
 );
 
 CREATE TABLE "usuario" (
-  "id" UUID PRIMARY KEY,
-  "nome" varchar(150),
-  "email" varchar(150) UNIQUE,
-  "senha_hash" varchar(255),
-  "telefone" varchar(20),
-  "endereco" text,
-  "ativo" boolean,
-  "criado_em" timestamp
+    "id" UUID PRIMARY KEY,
+    "nome" varchar(150) NOT NULL,
+    "email" varchar(150) UNIQUE NOT NULL,
+    "senha_hash" varchar(255) NOT NULL,
+    "telefone" varchar(20) NOT NULL,
+    "endereco" text NOT NULL,
+    "ativo" boolean NOT NULL DEFAULT false,
+    "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP,
+    CHECK (telefone.length == 11)
 );
 
 CREATE TABLE "funcao_usuario" (
-  "usuario_id" UUID,
-  "funcao_id" UUID
+    "usuario_id" UUID NOT NULL,
+    "funcao_id" UUID NOT NULL,
+    PRIMARY KEY ("usuario_id", "funcao_id")
 );
 
 CREATE TABLE "funcao" (
   "id" UUID PRIMARY KEY,
-  "nome" funcao_usuario
+  "nome" papel_usuario UNIQUE NOT NULL
 );
 
 CREATE TABLE "discente" (
   "id" UUID PRIMARY KEY,
-  "usuario_id" UUID UNIQUE,
-  "matricula" varchar(20) UNIQUE,
-  "curso_id" UUID,
-  "semestres_inativos" integer,
-  "status" status_discente,
-  "ira" decimal(4,2)
+  "usuario_id" UUID UNIQUE NOT NULL,
+  "matricula" varchar(20) UNIQUE NOT NULL,
+  "curso_id" UUID NOT NULL,
+  "semestres_inativos" integer DEFAULT 0,
+  "status" status_discente NOT NULL,
+  "ira" decimal(5,2) DEFAULT 0
 );
 
 CREATE TABLE "docente" (
-  "id" UUID PRIMARY KEY,
-  "usuario_id" UUID UNIQUE,
-  "departamento_id" UUID,
-  "titulacao" titulacao_docente,
-  "regime" contratacao,
-  "salario" decimal(10,2)
+    "id" UUID PRIMARY KEY,
+    "usuario_id" UUID UNIQUE NOT NULL,
+    "departamento_id" UUID NOT NULL,
+    "titulacao" titulacao_docente NOT NULL,
+    "regime" contratacao NOT NULL,
+    "salario" decimal(6,2) NOT NULL,
+    CHECK(salario>=0)
 );
 
 CREATE TABLE "fornecedor" (
   "id" UUID PRIMARY KEY,
-  "usuario_id" UUID UNIQUE,
-  "nome_empresa" varchar(150),
-  "cnpj" varchar(18) UNIQUE,
-  "documentos_pendentes" boolean,
-  "status" status_fornecedor,
-  "data_cadastro" timestamp,
-  "data_atualizacao" timestamp
+  "usuario_id" UUID UNIQUE NOT NULL,
+  "nome_empresa" varchar(150) NOT NULL,
+  "cnpj" varchar(18) UNIQUE NOT NULL,
+  "documentos_pendentes" boolean DEFAULT false,
+  "status" status_fornecedor NOT NULL,
+  "data_cadastro" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "data_atualizacao" timestamp DEFAULT BEFORE (UPDATE)
 );
 
 CREATE TABLE "funcionario" (
-  "id" uuid PRIMARY KEY,
-  "usuario_id" UUID UNIQUE,
-  "departamento_id" UUID,
-  "cargo" varchar(100),
-  "data_admissao" date,
-  "salario" decimal(10,2),
-  "regime" contratacao
+    "id" uuid PRIMARY KEY,
+    "usuario_id" UUID UNIQUE NOT NULL,
+    "departamento_id" UUID NOT NULL,
+    "cargo" varchar(100) NOT NULL,
+    "data_admissao" date NOT NULL,
+    "salario" decimal(6,2) NOT NULL,
+    "regime" contratacao NOT NULL,
+    CHECK (salario >=0)
 );
 
 CREATE TABLE "administrador" (
-  "id" UUID PRIMARY KEY,
-  "usuario_id" UUID UNIQUE,
-  "pode_gerenciar_usuarios" boolean DEFAULT true,
-  "pode_gerenciar_financas" boolean DEFAULT true,
-  "pode_gerenciar_departamentos" boolean DEFAULT true,
-  "ultimo_acesso" timestamp
+    "id" UUID PRIMARY KEY,
+    "usuario_id" UUID UNIQUE NOT NULL,
+    "nivel" nivel_admin NOT NULL,
+    "pode_gerenciar_usuarios" boolean DEFAULT true,
+    "pode_gerenciar_financas" boolean DEFAULT true,
+    "pode_gerenciar_departamentos" boolean DEFAULT true,
+    "ultimo_acesso" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "sessao" (
   "id" UUID PRIMARY KEY,
-  "usuario_id" UUID,
-  "refresh_token" text,
-  "criado_em" timestamp,
-  "expira_em" timestamp,
-  "ip" varchar(50),
-  "user_agent" text
+  "usuario_id" UUID NOT NULL,
+  "refresh_token" text NOT NULL,
+  "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "expira_em" timestamp NOT NULL,
+  "ip" varchar(50) NOT NULL,
+  "user_agent" text NOT NULL
 );
 
 CREATE TABLE "departamento" (
   "id" UUID PRIMARY KEY,
-  "nome" varchar(150),
-  "sigla" varchar(20) UNIQUE
+  "nome" varchar(150) NOT NULL,
+  "sigla" varchar(20) UNIQUE NOT NULL
 );
 
 CREATE TABLE "curso" (
   "id" UUID PRIMARY KEY,
-  "nome" varchar(150),
-  "departamento_id" UUID,
-  "codigo" varchar(20) UNIQUE,
-  "carga_horaria" integer,
-  "ativo" boolean
+  "nome" varchar(150) NOT NULL,
+  "departamento_id" UUID NOT NULL,
+  "codigo" varchar(20) UNIQUE NOT NULL,
+  "carga_horaria" integer DEFAULT 0,
+  "ativo" boolean DEFAULT true
 );
 
 CREATE TABLE "disciplina" (
-  "id" UUID PRIMARY KEY,
-  "codigo" varchar(20) UNIQUE,
-  "nome" varchar(150),
-  "carga_horaria" integer,
-  "curso_id" UUID
+    "id" UUID PRIMARY KEY,
+    "codigo" varchar(20) UNIQUE NOT NULL,
+    "nome" varchar(150) NOT NULL,
+    "carga_horaria" integer DEFAULT 0,
+    "curso_id" UUID NOT NULL,
+    CHECK (carga_horaria>=0)
 );
 
 CREATE TABLE "turma" (
-  "id" UUID PRIMARY KEY,
-  "disciplina_id" UUID,
-  "docente_id" UUID,
-  "horario" varchar(100),
-  "sala" varchar(50),
-  "vagas" integer
+    "id" UUID PRIMARY KEY,
+    "disciplina_id" UUID NOT NULL,
+    "docente_id" UUID NOT NULL,
+    "horario" varchar(100) NOT NULL,
+    "sala" varchar(50) NOT NULL,
+    "semestre" varchar(50) NOT NULL,
+    "ano" INTEGER NOT NULL,
+    "vagas" integer DEFAULT 100,
+    UNIQUE("disciplina_id,""docente_id", "semestre", "ano"),
+    CHECK (vagas >=0)
 );
 
 CREATE TABLE "pre_requisito" (
-  "disciplina_id" UUID,
-  "pre_requisito" UUID,
-  PRIMARY KEY ("disciplina_id", "pre_requisito")
-);
-
-CREATE TABLE "historico_escolar" (
-  "id" UUID PRIMARY KEY,
-  "discente_id" UUID,
-  "disciplina_id" UUID,
-  "semestre" varchar(20),
-  "nota_final" decimal(4,2)
+    "disciplina_id" UUID,
+    "pre_requisito" UUID,
+    PRIMARY KEY ("disciplina_id", "pre_requisito")
 );
 
 CREATE TABLE "matricula_semestre" (
-  "id" UUID PRIMARY KEY,
-  "discente_id" UUID,
-  "semestre" varchar(20),
-  "data_matricula" timestamp,
-  "status" status_matricula
+    "id" UUID PRIMARY KEY,
+    "discente_id" UUID NOT NULL,
+    "semestre" varchar(20) NOT NULL,
+    "data_matricula" timestamp NOT NULL,
+    "status" status_matricula NOT NULL,
+    UNIQUE ("discente_id","semestre")
 );
 
 CREATE TABLE "matricula_disciplina" (
-  "id" UUID PRIMARY KEY,
-  "matricula_id" UUID,
-  "disciplina_id" UUID,
-  "turma_id" UUID,
-  "nota" decimal(4,2),
-  "faltas" integer,
-  "status" status_matricula
+    "id" UUID PRIMARY KEY,
+    "matricula_id" UUID NOT NULL,
+    "turma_id" UUID NOT NULL,
+    "nota" decimal(4,2) DEFAULT 0,
+    "faltas" integer DEFAULT 0,
+    "status" status_matricula NOT NULL,
+    CHECK (nota >=0),
+    CHECK (faltas >=0)
 );
 
 CREATE TABLE "tarefa" (
   "id" UUID PRIMARY KEY,
-  "disciplina_id" UUID,
-  "titulo" varchar(150),
-  "descricao" text,
-  "prazo" date,
-  "criado_em" timestamp
+  "turma_id" UUID NOT NULL,
+  "titulo" varchar(150) NOT NULL,
+  "descricao" text NOT NULL,
+  "prazo" date NOT NULL,
+  "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "pedido" (
-  "id" UUID PRIMARY KEY,
-  "fornecedor_id" UUID,
-  "numero" varchar(30) UNIQUE,
-  "criado_por" UUID,
-  "valor_total" decimal(10,2),
-  "status" status_pedido,
-  "data_pedido" timestamp,
-  "data_recebimento" date,
-  "prazo_entrega" date
+    "id" UUID PRIMARY KEY,
+    "fornecedor_id" UUID NOT NULL,
+    "numero" varchar(30) UNIQUE NOT NULL,
+    "criado_por" UUID NOT NULL,
+    "valor_total" decimal(10,2) NOT NULL,
+    "status" status_pedido NOT NULL,
+    "data_pedido" timestamp DEFAULT CURRENT_TIMESTAMP,
+    "data_recebimento" date NULL,
+    "prazo_entrega" date NOT NULL,
+    CHECK (valor_total >= 0)
 );
 
 CREATE TABLE "item_pedido" (
-  "id" UUID PRIMARY KEY,
-  "pedido_id" UUID,
-  "descricao" text,
-  "quantidade" integer,
-  "valor_unitario" decimal(10,2)
+    "id" UUID PRIMARY KEY,
+    "pedido_id" UUID NOT NULL,
+    "descricao" text NOT NULL,
+    "quantidade" integer NOT NULL,
+    "valor_unitario" decimal(10,2) NOT NULL,
+    CHECK (valor_unitario>=0)
 );
 
 CREATE TABLE "notificacao" (
   "id" uuid PRIMARY KEY,
-  "titulo" varchar(150),
-  "mensagem" text,
-  "criado_em" timestamp
+  "titulo" varchar(150) NOT NULL,
+  "mensagem" text NOT NULL,
+  "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "usuario_notificacao" (
-  "usuario_id" UUID,
-  "notificacao_id" UUID,
-  "lida" boolean,
-  PRIMARY KEY ("usuario_id", "notificacao_id")
+    "usuario_id" UUID NOT NULL,
+    "notificacao_id" UUID NOT NULL,
+    "lida" boolean DEFAULT false,
+    PRIMARY KEY ("usuario_id", "notificacao_id")
 );
 
 CREATE TABLE "permissao" (
-  "id" UUID PRIMARY KEY,
-  "nome" varchar(100),
-  "descricao" text
+    "id" UUID PRIMARY KEY,
+    "nome" varchar(100) NOT NULL,
+    "descricao" text NOT NULL
 );
 
 CREATE TABLE "funcao_permissao" (
-  "funcao_id" UUID,
-  "permissao_id" UUID,
+  "funcao_id" UUID NOT NULL,
+  "permissao_id" UUID NOT NULL,
   PRIMARY KEY ("funcao_id", "permissao_id")
 );
 
 CREATE TABLE "calendario_academico" (
-  "id" UUID PRIMARY KEY,
-  "departamento_id" UUID,
-  "data_inicio" date,
-  "data_fim" date
+    "id" UUID PRIMARY KEY,
+    "departamento_id" UUID NOT NULL,
+    "data_inicio" date NOT NULL,
+    "data_fim" date NOT NULL,
+    CHECK (data_fim>data_inicio)
 );
 
 CREATE TABLE "avaliacao" (
-  "id" UUID PRIMARY KEY,
-  "disciplina_id" UUID,
-  "tipo" varchar(30),
-  "peso" double,
-  "nota_maxima" double,
-  "data" date,
-  "descricao" text
+    "id" UUID PRIMARY KEY,
+    "turma_id" UUID NOT NULL,
+    "tipo" varchar(30) NOT NULL,
+    "peso" decimal(4,2) DEFAULT 1,
+    "nota_maxima" decimal(4,2) DEFAULT 0,
+    "data" date NOT NULL,
+    "descricao" text NOT NULL,
+    CHECK (nota_maxima>=0),
+    CHECK (peso>0)
 );
 
 CREATE TABLE "grade_curricular" (
   "id" UUID PRIMARY KEY,
-  "curso_id" UUID,
-  "disciplina_id" UUID,
-  "periodo" integer,
-  "obrigatoria" boolean
+  "curso_id" UUID NOT NULL,
+  "disciplina_id" UUID NOT NULL,
+  "periodo" integer NOT NULL,
+  "obrigatoria" boolean DEFAULT true
 );
 
 ALTER TABLE "funcao_usuario" ADD FOREIGN KEY ("usuario_id") REFERENCES "usuario" ("id") DEFERRABLE INITIALLY IMMEDIATE;
@@ -300,23 +315,17 @@ ALTER TABLE "pre_requisito" ADD FOREIGN KEY ("disciplina_id") REFERENCES "discip
 
 ALTER TABLE "pre_requisito" ADD FOREIGN KEY ("pre_requisito") REFERENCES "disciplina" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "historico_escolar" ADD FOREIGN KEY ("discente_id") REFERENCES "discente" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE "historico_escolar" ADD FOREIGN KEY ("disciplina_id") REFERENCES "disciplina" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
 ALTER TABLE "matricula_semestre" ADD FOREIGN KEY ("discente_id") REFERENCES "discente" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "matricula_disciplina" ADD FOREIGN KEY ("matricula_id") REFERENCES "matricula_semestre" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "matricula_disciplina" ADD FOREIGN KEY ("disciplina_id") REFERENCES "disciplina" ("id") DEFERRABLE INITIALLY IMMEDIATE;
-
 ALTER TABLE "matricula_disciplina" ADD FOREIGN KEY ("turma_id") REFERENCES "turma" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "tarefa" ADD FOREIGN KEY ("disciplina_id") REFERENCES "disciplina" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE "tarefa" ADD FOREIGN KEY ("turma_id") REFERENCES "turma" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "pedido" ADD FOREIGN KEY ("fornecedor_id") REFERENCES "fornecedor" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "pedido" ADD FOREIGN KEY ("criado_por") REFERENCES "usuario" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE "pedido" ADD FOREIGN KEY ("criado_por") REFERENCES "administrador" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "item_pedido" ADD FOREIGN KEY ("pedido_id") REFERENCES "pedido" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
@@ -330,7 +339,7 @@ ALTER TABLE "funcao_permissao" ADD FOREIGN KEY ("permissao_id") REFERENCES "perm
 
 ALTER TABLE "calendario_academico" ADD FOREIGN KEY ("departamento_id") REFERENCES "departamento" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "avaliacao" ADD FOREIGN KEY ("disciplina_id") REFERENCES "disciplina" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE "avaliacao" ADD FOREIGN KEY ("turma_id") REFERENCES "turma" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "grade_curricular" ADD FOREIGN KEY ("curso_id") REFERENCES "curso" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
