@@ -1,3 +1,4 @@
+
 CREATE TYPE "nivel_admin" AS ENUM (
     'operacional',
     'gestor',
