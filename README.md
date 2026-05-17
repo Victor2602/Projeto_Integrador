@@ -74,18 +74,17 @@ Entretanto, em razão da eficiência e flexibilidade da ferramenta, o escopo ini
 ```text
 Projeto_Integrador/
 │
-├── prototipo/
-│   ├── prototipo.zip
-│   └── README.md
-│
 ├── banco_de_dados/
 │   ├── diagramas/
 │   ├── scripts_sql/
 │
 ├── documentos/
 │   ├── Projeto_Integrador.pdf
-│
-└── README.md
+|
+├── prototipo/
+│   ├── prototipo.zip
+│   └── README.md
+└── README.md #global
 ```
 ---
 ## Autores
