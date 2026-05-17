@@ -1,17 +1,102 @@
-# Projeto_Integrador
-Esse repositório tem por objetivo apresentar as soluções para os enunciados da 2ª etapa do Projeto Integrador do curso de Análise e Desenvolvimento de Sistemas da instituição Senac EAD.
+# Projeto Integrador — Sistema Educacional
 
-# Metodologia
-Em função das emergentes tecnologias de Inteligência Artificial(IA), a segunda parte do projeto, no qual foi necessário criar um protótipo de um sistema educacional e desenvolver a estrutura de dados desse respectivo protótipo, foi dividida em duas etapas:
-    1. A prototipação foi realizada pelo Figma (https://www.figma.com), com o auxilio da ferramenta Figma Make, e de posteriores alterações manuais;
-    2. A estrutura de dados foi desenvolvida com o auxilio da ferramenta open-source dbdiagram.io (https://dbdiagram.io), com posterior implementação pelo DataGrip.
+![Status](https://img.shields.io/badge/status-concluído-brightgreen)
+![Curso](https://img.shields.io/badge/curso-ADS-blue)
+![Instituição](https://img.shields.io/badge/Senac-EAD-orange)
+![Licença](https://img.shields.io/badge/license-MIT-lightgrey)
 
-# Resultados
-A prototipação com o uso do Figma Make permitiu à equipe focar na arquitetura do design, de forma a obtermos um protótipo com navegação interativa e elementos simples. No entanto, em função da alta eficiência da ferramenta, o escopo do protótipo evoluiu e, consequentemente, sua documentação inicial tornou-se defasada, sendo necessário alterar:
-    1. O diagrama de casos de uso inicial, dado que a função do ator especializado "Funcionário (compras)" pôde ser transferida à uma especialização do ator "Administrador", no caso "Administrador Operacional";
-    2. O ator "Administrador" sofreu três especializações:
-        2.1. Administrador Operacional:
-        2.2. Administrador Gestor:
-        2.3. Super-administrador:
-    3. Os dois cenários de casos de uso apresentados na documentação inicial tornaram-se insuficientes para determinar com abrangência suficiente a navegação interativa do usuário com o protótipo.
+## Sobre o Projeto
+
+Este repositório apresenta as soluções desenvolvidas para a segunda etapa do Projeto Integrador do curso de Análise e Desenvolvimento de Sistemas da instituição Senac EAD.
+
+O projeto teve como objetivo a elaboração de um protótipo de sistema educacional, bem como a modelagem de sua estrutura de dados, utilizando ferramentas modernas de prototipação e modelagem relacional.
+
+---
+
+## Sumário
+
+- [Metodologia](#metodologia)
+- [Ferramentas Utilizadas](#ferramentas-utilizadas)
+- [Resultados](#resultados)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Autores](#autores)
+- [Licença](#licença)
+
+---
+
+## Metodologia
+
+Devido ao avanço das tecnologias de Inteligência Artificial (IA), o desenvolvimento desta etapa do projeto foi dividido em dois processos principais:
+
+### 1. Prototipação
+
+A interface do sistema foi desenvolvida utilizando o [Figma](https://www.figma.com), com apoio da ferramenta Figma Make e posteriores ajustes manuais realizados pela equipe.
+
+### 2. Modelagem da Estrutura de Dados
+
+A modelagem do banco de dados foi realizada com o auxílio da ferramenta open-source [dbdiagram.io](https://dbdiagram.io), seguida da implementação prática utilizando o DataGrip.
+
+---
+
+## Ferramentas Utilizadas
+
+| Ferramenta | Finalidade |
+|---|---|
+| Figma | Prototipação da interface |
+| Figma Make | Geração inicial de componentes |
+| dbdiagram.io | Modelagem do banco de dados |
+| DataGrip | Implementação e gerenciamento SQL |
+| GitHub | Versionamento do projeto |
+
+---
+
+## Resultados
+
+A utilização do Figma Make permitiu que a equipe concentrasse esforços na arquitetura do design e na experiência de navegação do usuário, possibilitando a construção de um protótipo interativo, funcional e visualmente consistente.
+
+Entretanto, em razão da eficiência e flexibilidade da ferramenta, o escopo inicial do sistema evoluiu significativamente, tornando parte da documentação inicial defasada. Dessa forma, foram necessárias algumas alterações estruturais:
+
+### Alterações Realizadas
+
+1. O diagrama inicial de casos de uso foi revisado, uma vez que as responsabilidades do ator especializado **"Funcionário (Compras)"** puderam ser incorporadas ao ator **"Administrador Operacional"**;
+
+2. O ator **"Administrador"** passou a possuir três especializações:
+   - Administrador Operacional;
+   - Administrador Gestor;
+   - Superadministrador;
+
+3. Os cenários inicialmente definidos tornaram-se insuficientes para representar toda a navegação interativa do sistema, exigindo ampliação da documentação funcional.
+
+---
+
+## Estrutura do Projeto
+
+```text
+Projeto_Integrador/
+│
+├── prototipo/
+│   ├── figma/
+│   └── documentacao/
+│
+├── banco_de_dados/
+│   ├── diagramas/
+│   ├── scripts_sql/
+│   └── modelo_relacional/
+│
+├── documentos/
+│   ├── casos_de_uso/
+│   ├── requisitos/
+│   └── relatorios/
+│
+└── README.md
+```
+---
+## Autores
+Projeto desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sistemas — Senac EAD:
+- Victor Hugo Nascimento Silva
+- (Ponham o nome de vcs)
+
+---
+## Licença
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais informações.
 
