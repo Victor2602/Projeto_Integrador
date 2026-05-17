@@ -99,7 +99,7 @@ CREATE TABLE "fornecedor" (
   "documentos_pendentes" boolean DEFAULT false,
   "status" status_fornecedor NOT NULL,
   "data_cadastro" timestamp DEFAULT CURRENT_TIMESTAMP,
-  "data_atualizacao" timestamp DEFAULT BEFORE (UPDATE)
+  "data_atualizacao" timestamp
 );
 
 CREATE TABLE "funcionario" (
@@ -166,7 +166,7 @@ CREATE TABLE "turma" (
     "semestre" varchar(50) NOT NULL,
     "ano" INTEGER NOT NULL,
     "vagas" integer DEFAULT 100,
-    UNIQUE("disciplina_id,""docente_id", "semestre", "ano"),
+    UNIQUE("disciplina_id","docente_id", "semestre", "ano"),
     CHECK (vagas >=0)
 );
 
