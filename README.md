@@ -91,6 +91,8 @@ Projeto_Integrador/
 Projeto desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sistemas — Senac EAD:
 - Victor Hugo Nascimento Silva
 - Raissa Anne Ribeiro
+- Isabelly Franklin Silva
+- 
   
 
 ---
