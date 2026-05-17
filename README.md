@@ -92,7 +92,8 @@ Projeto desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sist
 - Victor Hugo Nascimento Silva
 - Raissa Anne Ribeiro
 - Isabelly Franklin Silva
-- 
+-
+- Kayky Raphael Tavares Macena
   
 
 ---
