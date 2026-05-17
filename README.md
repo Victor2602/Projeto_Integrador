@@ -75,18 +75,15 @@ Entretanto, em razão da eficiência e flexibilidade da ferramenta, o escopo ini
 Projeto_Integrador/
 │
 ├── prototipo/
-│   ├── figma/
-│   └── documentacao/
+│   ├── prototipo.zip
+│   └── README.md
 │
 ├── banco_de_dados/
 │   ├── diagramas/
 │   ├── scripts_sql/
-│   └── modelo_relacional/
 │
 ├── documentos/
-│   ├── casos_de_uso/
-│   ├── requisitos/
-│   └── relatorios/
+│   ├── Projeto_Integrador.pdf
 │
 └── README.md
 ```
