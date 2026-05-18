@@ -94,6 +94,7 @@ Projeto desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sist
 - Isabelly Franklin Silva
 - Izabela Rodrigues Costa
 - 
+- Cleber Henrique Azevedo Martins
   
 
 ---
