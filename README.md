@@ -89,14 +89,12 @@ Projeto_Integrador/
 ---
 ## Autores
 Projeto desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sistemas — Senac EAD:
-- Victor Hugo Nascimento Silva
-- Raissa Anne Ribeiro
-- Isabelly Franklin Silva
--
-- Kayky Raphael Tavares Macena
-- Izabela Rodrigues Costa
-- 
 - Cleber Henrique Azevedo Martins
+- Isabelly Franklin Silva
+- Izabela Rodrigues Costa
+- Kayky Raphael Tavares Macena
+- Raissa Anne Ribeiro
+- Victor Hugo Nascimento Silva
   
 
 ---
