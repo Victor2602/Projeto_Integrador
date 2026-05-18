@@ -94,6 +94,7 @@ Projeto desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sist
 - Izabela Rodrigues Costa
 - Kayky Raphael Tavares Macena
 - Raissa Anne Ribeiro
+- Raphael Chioda Patricio
 - Victor Hugo Nascimento Silva
   
 
